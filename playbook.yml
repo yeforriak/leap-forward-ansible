@@ -1,0 +1,13 @@
+---
+- hosts: tag_Name_victorf_leap_forward_etcd
+  remote_user: centos
+
+  tasks:
+    - name: install ntp
+      yum: name=ntp state=latest
+      become: true
+
+    - name: Make sure NTP is started up
+      service: name=ntpd state=started enabled=yes
+      tags: ntpd
+      become: true
