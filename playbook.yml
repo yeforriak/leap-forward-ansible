@@ -3,11 +3,28 @@
   remote_user: centos
 
   tasks:
-    - name: install ntp
-      yum: name=ntp state=latest
+    - name: Install vim
+      yum:
+        name: vim
+        state: latest
+      become: true
+
+    - name: Install ntp
+      yum:
+        name: ntp
+        state: latest
       become: true
 
     - name: Make sure NTP is started up
-      service: name=ntpd state=started enabled=yes
+      service:
+        name: ntpd
+        state: started
+        enabled: yes
       tags: ntpd
+      become: true
+
+    - name: Install etcd
+      yum:
+        name: etcd
+        state: latest
       become: true
