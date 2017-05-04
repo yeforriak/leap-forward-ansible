@@ -1,7 +1,6 @@
 ---
-- hosts: tag_Name_victorf_leap_forward_etcd
+- hosts: tag_Type_etcd
   remote_user: centos
-
   tasks:
     - name: Install vim
       yum:
@@ -28,3 +27,70 @@
         name: etcd
         state: latest
       become: true
+
+    - name: Make sure etcd is started up
+      service:
+        name: etcd
+        state: started
+        enabled: yes
+      tags: etcd
+      become: true
+
+
+- hosts: tag_Name_victorf_leap_forward_etcd_0
+  remote_user: centos
+  tasks:
+    - name: "Add vars cointaining static ip addresses"
+      include_vars: vars.yml
+
+    - name: Replace etcd conf
+      template:
+        src: templates/etcd0.j2
+        dest: /etc/etcd/etcd.conf
+      notify:
+        - restart etcd
+      become: true
+  handlers:
+    - name: restart etcd
+      service:
+        name: etcd
+        state: restarted
+
+- hosts: tag_Name_victorf_leap_forward_etcd_1
+  remote_user: centos
+  tasks:
+    - name: "Add vars cointaining static ip addresses"
+      include_vars: vars.yml
+
+    - name: Replace etcd conf
+      template:
+        src: templates/etcd1.j2
+        dest: /etc/etcd/etcd.conf
+      notify:
+        - restart etcd
+      become: true
+
+  handlers:
+    - name: restart etcd
+      service:
+        name: etcd
+        state: restarted
+
+- hosts: tag_Name_victorf_leap_forward_etcd_2
+  remote_user: centos
+  tasks:
+    - name: "Add vars cointaining static ip addresses"
+      include_vars: vars.yml
+
+    - name: Replace etcd conf
+      template:
+        src: templates/etcd2.j2
+        dest: /etc/etcd/etcd.conf
+      notify:
+        - restart etcd
+      become: true
+  handlers:
+    - name: restart etcd
+      service:
+        name: etcd
+        state: restarted
